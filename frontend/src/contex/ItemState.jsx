@@ -3,7 +3,7 @@ import ItemContex from "./itemContext";
 
 const ItemState = (prop) => {
   const [cart,setCart] = useState([]);
-  const [ttlCart,setTtlCart] = useState();
+  const [ttlCart,setTtlCart] = useState(null);
 
 
   //method of addToCart 
@@ -25,7 +25,7 @@ const ItemState = (prop) => {
     }
   };
 
-  //method of addToCart 
+  //method of cartItem 
   const cartItem = async () => {
     try {
       const host = "http://localhost:8080";
@@ -44,16 +44,36 @@ const ItemState = (prop) => {
       console.log(error);
     }
   };
-  useEffect(()=>{
-    cartItem()
-  },[]);
+  // useEffect(()=>{
+  //   cartItem()
+  // },[]);
     //   console.log(cart)
 // setTimeout(()=>{
 
 // },1000)
 
+
+  //method of order 
+  const order = async (itemId) => {
+    try {
+      const host = "http://localhost:8080";
+      const response = await fetch(`${host}/api/cart/order`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ order:itemId }),
+      });
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <ItemContex.Provider value={{ addtocart,cart,cartItem,setTtlCart,ttlCart }}>
+    <ItemContex.Provider value={{ addtocart,cart,cartItem,setTtlCart,ttlCart,order }}>
       {prop.children}
     </ItemContex.Provider>
   );

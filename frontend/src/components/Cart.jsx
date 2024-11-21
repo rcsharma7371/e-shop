@@ -1,52 +1,67 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import ItemContex from "../contex/itemContext";
 
 const Cart = () => {
   const contex = useContext(ItemContex);
-  const { cart } = contex;
-console.log(cart);
-//   const groupedItems = items.reduce((acc, item) => {
-//     if (!acc[item.name]) {
-//       acc[item.name] = []; // Initialize array if it doesn't exist
-//     }
-//     acc[item.name].push(item);
-//     return acc;
-//   }, {});
-  
-//   console.log(groupedItems);
+  const { cart,cartItem,order } = contex;
+// console.log(cart);
 
-// const cartItem = cart.reduce((acc,item)=>{
-//     if(!acc[item.title]){
-//         acc[item.title]=[];
-//     }
-//     acc[item.title]
-// })
+const cartAddedItem = cart.reduce((acc,item)=>{
+    if(!acc[item.title]){
+        acc[item.title]=[];
+    }
+    acc[item.title].push(item);
+    return acc;
+},[]);
+
+
+// console.log(typeof cartAddedItem);
+const idArray = [];
+cart?.reduce((item,acc)=>{
+  idArray.push(acc._id);
+  // console.log(acc._id);
+},0)
+
+const handleOrder =async () =>{
+  const confirmOrder =await order(idArray);
+  if(confirmOrder.status==true){
+    alert(`Your order is placed successfully Your order No ${confirmOrder.orderNo}`);
+  }
+}
+
+useEffect(()=>{
+  cartItem();
+},[])
+// console.log(idArray);
   
   return (
     <div className="row mt-3">
         <div className="col col-9">
-      {cart?.map((item) => (
-        <div className="card mb-3" key={item._id}>
+      {Object.values(cartAddedItem)?.map((item) => (
+        
+        <div className="card mb-3" key={item[0]._id}>
+          {/* {console.log(item)} */}
           <div className="row g-2">
             <div className="col-md-4 mb-3">
               <img
-                src={item.image}
+                src={item[0].image}
                 className="img-fluid rounded-start"
                 alt="Product ref image"
               />
+              {/* {console.log(item[0].title)} */}
             </div>
             <div className="col-md-8">
               <div className="card-body">
-                <h5 className="card-title">{item.title}</h5>
+                <h5 className="card-title">{item[0].title}</h5>
                 <p className="card-text">
-                  <small className="text-muted">₹ {item.price.toLocaleString("en-IN")}</small>
+                  <small className="text-muted">₹ {item[0].price.toLocaleString("en-IN")}</small>
                   <div className="mt-2">
                     <button className="btn btn-outline-primary"> + </button>&nbsp;
-                    qty
+                    {item.length}
                     &nbsp;<button className="btn btn-outline-primary"> - </button>
                   </div>
                 </p>
-                <p className="card-text">{item.description}</p>
+                <p className="card-text">{item[0].description}</p>
               </div>
             </div>
           </div>
@@ -56,6 +71,7 @@ console.log(cart);
       <div className="col col-3 d-flex flex-column">
         <h4>Total Price</h4>
         <p>Total Price : ₹{cart?.reduce((curr,acc)=>{return curr+acc.price},0).toLocaleString("en-IN")}</p>
+        <button className="btn btn-outline-primary" onClick={handleOrder}>Order Now</button>
       </div>
     </div>
   );

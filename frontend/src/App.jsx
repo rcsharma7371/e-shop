@@ -20,13 +20,13 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               {!localStorage.getItem("token") ? (
-                <Routes>
+                <>
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
-                </Routes>
-              ) : (
-                <Route path="/product" element={<Product />} />
+                </>
+              ) : (null
               )}
+              <Route path="/product" element={<Product />} />
               <Route path="/about" element={<About />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="*" element={<PageNotFound />} />

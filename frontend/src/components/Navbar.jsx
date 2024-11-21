@@ -15,6 +15,7 @@ export default function Navbar() {
   // console.log(cart);
   const handleLogout = () =>{
     localStorage.removeItem('token');
+    alert("Successfully Logout");
     navigator('/');
   }
 
