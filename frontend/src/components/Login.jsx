@@ -19,6 +19,7 @@ const Login = () => {
         body:JSON.stringify({email:formData.email,password:formData.password})
     });
     const json =await response.json();
+    // console.log(json)
     if(json.status==true){
         //redirect
         localStorage.setItem("token",json.authToken);
@@ -27,7 +28,7 @@ const Login = () => {
     }else{
         alert(json.error)
     }
-    console.log(json);
+    // console.log(json);
   };
 
   return (
