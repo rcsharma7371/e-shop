@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import ItemContex from "./itemContext";
+const host = import.meta.env.VITE_API_URL;
 
 const ItemState = (prop) => {
-  const [cart,setCart] = useState([]);
-  const [ttlCart,setTtlCart] = useState(null);
+  const [cart, setCart] = useState([]);
+  const [ttlCart, setTtlCart] = useState(null);
 
-
-  //method of addToCart 
+  //method of addToCart
   const addtocart = async (id) => {
     try {
-      const host = "http://localhost:8080";
       const response = await fetch(`${host}/api/cart/addtocart`, {
         method: "POST",
         headers: {
@@ -25,16 +24,15 @@ const ItemState = (prop) => {
     }
   };
 
-  //method of cartItem 
+  //method of cartItem
   const cartItem = async () => {
     try {
-      const host = "http://localhost:8080";
       const response = await fetch(`${host}/api/cart/cartItems`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
           "auth-token": localStorage.getItem("token"),
-        }
+        },
       });
       const json = await response.json();
       setCart(json.cartItems.cart);
@@ -44,26 +42,15 @@ const ItemState = (prop) => {
       console.log(error);
     }
   };
-  // useEffect(()=>{
-  //   cartItem()
-  // },[]);
-    //   console.log(cart)
-// setTimeout(()=>{
-
-// },1000)
-
-
-  //method of order 
   const order = async (itemId) => {
     try {
-      const host = "http://localhost:8080";
       const response = await fetch(`${host}/api/cart/order`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
-        body: JSON.stringify({ order:itemId }),
+        body: JSON.stringify({ order: itemId }),
       });
       const json = await response.json();
       return json;
@@ -73,7 +60,9 @@ const ItemState = (prop) => {
   };
 
   return (
-    <ItemContex.Provider value={{ addtocart,cart,cartItem,setTtlCart,ttlCart,order }}>
+    <ItemContex.Provider
+      value={{ addtocart, cart, cartItem, setTtlCart, ttlCart, order }}
+    >
       {prop.children}
     </ItemContex.Provider>
   );
